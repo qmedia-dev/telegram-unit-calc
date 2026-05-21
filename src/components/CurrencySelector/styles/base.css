@@ -1,0 +1,20 @@
+.currency-selector {
+  margin-top: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.currency-selector__label {
+  font-size: 14px;
+  opacity: 0.7;
+}
+
+.currency-selector__select {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: #fff;
+  font-size: 16px;
+}

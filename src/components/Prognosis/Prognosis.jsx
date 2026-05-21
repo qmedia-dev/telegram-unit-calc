@@ -4,6 +4,7 @@ import WebApp from '@twa-dev/sdk';
 import { useApp } from '../../hooks';
 import Form from '../Form/Form';
 import Result from '../Result/Result';
+import CurrencySelector from '../CurrencySelector/CurrencySelector';
 
 const Prognosis = () => {
   const { setCalcType, formatPrice, formatNumber } = useApp();
@@ -19,6 +20,7 @@ const Prognosis = () => {
   const [groups, setGroups] = React.useState([]);
   const [canCalculate, setCanCalculate] = React.useState(false);
   const [results, setResults] = React.useState([]);
+  const [currency, setCurrency] = React.useState('BYN');
 
   useEffect(() => {
     WebApp.BackButton.onClick(() => {
@@ -39,7 +41,7 @@ const Prognosis = () => {
             value: budget,
             formattedValue: formatPrice(budget),
             setValue: setBudget,
-            unit: 'руб.',
+            unit: currency,
           },
           {
             label: '💸 CPC',
@@ -48,7 +50,7 @@ const Prognosis = () => {
             value: cpc,
             formattedValue: formatPrice(cpc),
             setValue: setCpc,
-            unit: 'руб.',
+            unit: currency,
           },
         ],
       },
@@ -85,7 +87,7 @@ const Prognosis = () => {
             value: averageSales,
             formattedValue: formatPrice(averageSales),
             setValue: setAverageSales,
-            unit: 'руб.',
+            unit: currency,
           },
           {
             label: '📊 Маржинальность (Margin)',
@@ -151,7 +153,7 @@ const Prognosis = () => {
           'Вы можете увеличивать бюджет и охваты, повышая CPC до этого уровня, оставаясь прибыльными',
         value: porogCpc,
         formattedValue: formatPrice(porogCpc),
-        unit: 'руб.',
+        unit: currency,
         isInvalid: porogCpc < 0,
       },
       {
@@ -160,7 +162,7 @@ const Prognosis = () => {
         caption: 'Максимальная стоимость одной заявки, которую вы можете себе позволить',
         value: porogCpa,
         formattedValue: formatPrice(porogCpa),
-        unit: 'руб.',
+        unit: currency,
         isInvalid: porogCpa < 0,
       },
       {
@@ -185,7 +187,7 @@ const Prognosis = () => {
           'Текущая стоимость заявки. Если она ниже порогового значения, то вы прибыльны и обязаны масштабироваться',
         value: cpa,
         formattedValue: formatPrice(cpa),
-        unit: 'руб.',
+        unit: currency,
         isInvalid: cpa < 0,
       },
       {
@@ -202,7 +204,7 @@ const Prognosis = () => {
           'Во сколько вам обходится каждый новый клиент. Вы можете снижать ее, повышая качество обработки заявок',
         value: costPerAquisition,
         formattedValue: formatPrice(costPerAquisition),
-        unit: 'руб.',
+        unit: currency,
         isInvalid: costPerAquisition < 0,
       },
       {
@@ -210,7 +212,7 @@ const Prognosis = () => {
         caption: 'Сколько платит вам клиент за весь его жизненный цикл',
         value: ltv,
         formattedValue: formatPrice(ltv),
-        unit: 'руб.',
+        unit: currency,
         isInvalid: ltv < 0,
       },
       {
@@ -218,7 +220,7 @@ const Prognosis = () => {
         caption: 'Для её увеличения есть несколько шагов. Хотите знать каких?',
         value: totalRevenue,
         formattedValue: formatPrice(totalRevenue),
-        unit: 'руб.',
+        unit: currency,
         isInvalid: totalRevenue < 0,
       },
       {
@@ -226,7 +228,7 @@ const Prognosis = () => {
         caption: 'Часто, продавая в «минус» первый раз, вы остаётесь прибыльными',
         value: firstSaleProfit,
         formattedValue: formatPrice(firstSaleProfit),
-        unit: 'руб.',
+        unit: currency,
         isInvalid: firstSaleProfit < 0,
       },
       {
@@ -234,7 +236,7 @@ const Prognosis = () => {
         caption: 'Ваш чистый заработок с одного клиента за весь его жизненный цикл',
         value: profitPerCustomer,
         formattedValue: formatPrice(profitPerCustomer),
-        unit: 'руб.',
+        unit: currency,
         isInvalid: profitPerCustomer < 0,
       },
       {
@@ -242,11 +244,11 @@ const Prognosis = () => {
         caption: 'Ваш итоговый финансовый результат',
         value: totalProfit,
         formattedValue: formatPrice(totalProfit),
-        unit: 'руб.',
+        unit: currency,
         isInvalid: totalProfit < 0,
       },
     ]);
-  }, [budget, cpc, cr1, cr2, averageSales, margin, retention, canCalculate]);
+  }, [budget, cpc, cr1, cr2, averageSales, margin, retention, canCalculate, currency]);
 
   return (
     <>
@@ -256,6 +258,7 @@ const Prognosis = () => {
           <Form.Caption>
             Вставьте прогнозные значения и проверьте какой получите результат.
           </Form.Caption>
+          <CurrencySelector currency={currency} onChange={setCurrency} />
         </Form.Header>
         {groups.map((group, index) => (
           <Form.Group title={group.title} key={index}>

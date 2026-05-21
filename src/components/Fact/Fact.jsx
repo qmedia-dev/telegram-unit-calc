@@ -4,6 +4,7 @@ import WebApp from '@twa-dev/sdk';
 import { useApp } from '../../hooks';
 import Form from '../Form/Form';
 import Result from '../Result/Result';
+import CurrencySelector from '../CurrencySelector/CurrencySelector';
 
 const Fact = () => {
   const { setCalcType, formatPrice, formatNumber } = useApp();
@@ -19,6 +20,7 @@ const Fact = () => {
   const [groups, setGroups] = React.useState([]);
   const [canCalculate, setCanCalculate] = React.useState(false);
   const [results, setResults] = React.useState([]);
+  const [currency, setCurrency] = React.useState('BYN');
 
   useEffect(() => {
     WebApp.BackButton.onClick(() => {
@@ -39,7 +41,7 @@ const Fact = () => {
             value: budget,
             formattedValue: formatPrice(budget),
             setValue: setBudget,
-            unit: 'руб.',
+            unit: currency,
           },
           {
             label: '💸 CPC',
@@ -48,7 +50,7 @@ const Fact = () => {
             value: cpc,
             formattedValue: formatPrice(cpc),
             setValue: setCpc,
-            unit: 'руб.',
+            unit: currency,
           },
         ],
       },
@@ -85,7 +87,7 @@ const Fact = () => {
             value: averageSales,
             formattedValue: formatPrice(averageSales),
             setValue: setAverageSales,
-            unit: 'руб.',
+            unit: currency,
           },
           {
             label: '📊 Маржинальность (Margin)',
@@ -122,7 +124,7 @@ const Fact = () => {
           && retention !== '',
       ),
     );
-  }, [budget, cpc, leads, buyers, averageSales, margin, retention]);
+  }, [budget, cpc, leads, buyers, averageSales, margin, retention, currency]);
 
   useEffect(() => {
     if (!canCalculate) {
@@ -150,7 +152,7 @@ const Fact = () => {
           'Вы можете увеличивать бюджет и охваты, повышая CPC до этого уровня, оставаясь прибыльными',
         value: porogCpc,
         formattedValue: formatPrice(porogCpc),
-        unit: 'руб.',
+        unit: currency,
         isInvalid: porogCpc < 0,
       },
       {
@@ -159,7 +161,7 @@ const Fact = () => {
         caption: 'Максимальная стоимость одной заявки, которую вы можете себе позволить',
         value: porogCpa,
         formattedValue: formatPrice(porogCpa),
-        unit: 'руб.',
+        unit: currency,
         isInvalid: porogCpa < 0,
       },
       {
@@ -186,7 +188,7 @@ const Fact = () => {
           'Текущая стоимость заявки. Если она ниже порогового значения, то вы прибыльны и обязаны масштабироваться',
         value: cpa,
         formattedValue: formatPrice(cpa),
-        unit: 'руб.',
+        unit: currency,
         isInvalid: cpa < 0,
       },
       {
@@ -195,7 +197,7 @@ const Fact = () => {
           'Во сколько вам обходится каждый новый клиент. Вы можете снижать её, повышая качество обработки заявок',
         value: costPerAquisition,
         formattedValue: formatPrice(costPerAquisition),
-        unit: 'руб.',
+        unit: currency,
         isInvalid: costPerAquisition < 0,
       },
       {
@@ -203,7 +205,7 @@ const Fact = () => {
         caption: 'Сколько платит вам клиент за весь его жизненный цикл',
         value: ltv,
         formattedValue: formatPrice(ltv),
-        unit: 'руб.',
+        unit: currency,
         isInvalid: ltv < 0,
       },
       {
@@ -211,7 +213,7 @@ const Fact = () => {
         caption: 'Для её увеличения есть несколько шагов. Хотите знать каких?',
         value: totalRevenue,
         formattedValue: formatPrice(totalRevenue),
-        unit: 'руб.',
+        unit: currency,
         isInvalid: totalRevenue < 0,
       },
       {
@@ -219,7 +221,7 @@ const Fact = () => {
         caption: 'Часто, продавая в «минус» первый раз, вы остаётесь прибыльными',
         value: firstSaleProfit,
         formattedValue: formatPrice(firstSaleProfit),
-        unit: 'руб.',
+        unit: currency,
         isInvalid: firstSaleProfit < 0,
       },
       {
@@ -227,7 +229,7 @@ const Fact = () => {
         caption: 'Ваш чистый заработок с одного клиента за весь его жизненный цикл',
         value: profitPerCustomer,
         formattedValue: formatPrice(profitPerCustomer),
-        unit: 'руб.',
+        unit: currency,
         isInvalid: profitPerCustomer < 0,
       },
       {
@@ -235,11 +237,11 @@ const Fact = () => {
         caption: 'Ваш итоговый финансовый результат',
         value: totalProfit,
         formattedValue: formatPrice(totalProfit),
-        unit: 'руб.',
+        unit: currency,
         isInvalid: totalProfit < 0,
       },
     ]);
-  }, [budget, cpc, leads, buyers, averageSales, margin, retention, canCalculate]);
+  }, [budget, cpc, leads, buyers, averageSales, margin, retention, canCalculate, currency]);
 
   return (
     <>
@@ -249,6 +251,7 @@ const Fact = () => {
           <Form.Caption>
             Укажите ваши реальные показатели и увидите экономический результат
           </Form.Caption>
+          <CurrencySelector currency={currency} onChange={setCurrency} />
         </Form.Header>
         {groups.map((group, index) => (
           <Form.Group title={group.title} key={index}>
