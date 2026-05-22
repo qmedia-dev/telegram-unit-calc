@@ -124,7 +124,7 @@ const Prognosis = () => {
           && retention !== '',
       ),
     );
-  }, [budget, cpc, cr1, cr2, averageSales, margin, retention]);
+  }, [budget, cpc, cr1, cr2, averageSales, margin, retention, currency]);
 
   useEffect(() => {
     if (!canCalculate) {
